@@ -1,0 +1,8 @@
+easy_admin:
+  entities:
+    Product:
+      class: App\Entity\Content
+      form:
+        fields:
+          - { property: 'content' }
+          - { property: 'imageFile', type: 'vich_image' }

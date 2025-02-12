@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mitzi Castillo{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for publications in content %}
+            <div id="{{ publications.id }}" class="h-1/4 flex-col place-items-center">
+                <h1>{{ publications.title }}</h1>
+                    <div class="group relative">
+{#                        {{ publications.fileType }}#}
+{#                        <img#}
+{#                                class="transition-all duration-500 group-hover:blur-sm"#}
+{#                                src="{{ asset('uploads/images/' ~ publications.fileName) }}"#}
+{#                                alt="{{ publications.title }}"#}
+{#                                style="max-width: 200px; height: auto;"#}
+{#                        >#}
+                        {% if publications.fileType == 'image' %}
+                        <img
+                                class="transition-all duration-500 group-hover:blur-sm"
+                                src="{{ asset('uploads/images/' ~ publications.fileName) }}"
+                                alt="{{ publications.title }}"
+                                style="max-width: 200px; height: auto;"
+                        >
+                        {% else %}
+                            {{ publications.fileName }}
+                            <video controls width="250">
+                                <source src="{{ asset('upload/images/' ~ publications.fileName) }}" type="video/mp4">
+                                Votre navigateur ne supporte pas la lecture de vidéos.
+                            </video>
+                        {% endif %}
+                        <p class="absolute inset-0 flex items-center justify-center text-white border-gray-100 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                            Click to see more
+                        </p>
+                    </div>
+                <p class="list-none">{{ publications.description }}</p>
+            </div>
+        <br>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}
