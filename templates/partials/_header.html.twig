@@ -1,5 +1,47 @@
-<header class="bg-gray-800 text-white p-4">
-    <div class="container mx-auto flex justify-between text-center">
-        <h1 class="mt-24 mb-24 w-full text-2xl font-bold text-gray-200">Mitzi Castillo</h1>
+<header class="bg-black text-white h-screen flex flex-col overflow-hidden">
+    <!-- Header Banner -->
+    <div id="headerBanner" class="grid grid-cols-3 items-center h-16">
+        <div id="languages" class="flex justify-start">
+            <p class="mr-2 cursor-pointer">FR</p>
+            <p class="mr-2 cursor-pointer">ES</p>
+            <p class="mr-2 cursor-pointer">EN</p>
+        </div>
+        <div class="flex justify-center">
+            <p class="mr-2 font-baloo">Mexique [02:04]</p>
+            <p class="mr-2">France [02:04]</p>
+        </div>
+        <div class="flex justify-end">
+            <p class="mr-2 cursor-pointer">About</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto flex flex-col flex-grow justify-between h-full">
+        <!-- Image Section -->
+        <div class="flex justify-center items-center flex-grow relative">
+            <img
+                    src="{{ asset('assets/landingPic.png') }}"
+                    alt="Mitzi Castillo"
+                    class="max-w-full max-h-[50vh] object-cover"
+                    style="height: auto; width: auto;"
+            >
+        </div>
+
+        <!-- Art Direction Text -->
+        <div class="flex justify-center items-center">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl" style="font-family: Baloo, 'Cooper Black';">
+                Art Direction + DESIGN + 3D
+            </h1>
+        </div>
+
+        <!-- Scroll Section -->
+        <div class="flex justify-center pb-8">
+            <div class="group flex flex-col items-center cursor-pointer">
+                <p class="group-hover:opacity-80 group-hover:scale-110 transition ease-in duration-300">
+                    SCROLL
+                </p>
+                <div class="bg-white h-5 w-[2px] mt-3 group-hover:opacity-80 group-hover:scale-110 transition ease-in duration-300"></div>
+            </div>
+        </div>
     </div>
 </header>

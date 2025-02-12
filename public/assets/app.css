@@ -1,0 +1,21 @@
+/* assets/styles/app.css */
+@font-face {
+    font-family: 'Baloo';
+    src: url('../fonts/Baloo2-VariableFont_wght.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baloo-bold';
+    src: url('../fonts/Baloo2-VariableFont_wght.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baloo-bold';
+    src: url('../fonts/Baloo2-VariableFont_wght.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

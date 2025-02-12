@@ -6,42 +6,32 @@
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    body { background-color: black; }
 </style>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    {% for publications in content %}
-            <div id="{{ publications.id }}" class="h-1/4 flex-col place-items-center">
-                <h1>{{ publications.title }}</h1>
-                    <div class="group relative">
-{#                        {{ publications.fileType }}#}
-{#                        <img#}
-{#                                class="transition-all duration-500 group-hover:blur-sm"#}
-{#                                src="{{ asset('uploads/images/' ~ publications.fileName) }}"#}
-{#                                alt="{{ publications.title }}"#}
-{#                                style="max-width: 200px; height: auto;"#}
-{#                        >#}
+    <div class="flex justify-center text-white mt-2 mb-2 md:mt-12 md:mb-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl w-full">
+            {% for publications in content %}
+                <div id="{{ publications.id }}" class="flex flex-col place-items-center">
+                    <div class="group relative w-[300px] h-[200px] overflow-hidden"> <!-- Fixed size container -->
                         {% if publications.fileType == 'image' %}
-                        <img
-                                class="transition-all duration-500 group-hover:blur-sm"
-                                src="{{ asset('uploads/images/' ~ publications.fileName) }}"
-                                alt="{{ publications.title }}"
-                                style="max-width: 200px; height: auto;"
-                        >
+                            <img
+                                    class="w-full h-full object-cover transition-all duration-500 group-hover:blur-sm rounded-lg"
+                                    src="{{ asset('uploads/images/' ~ publications.fileName) }}"
+                                    alt="{{ publications.title }}"
+                            >
                         {% else %}
-                            {{ publications.fileName }}
-                            <video controls width="250">
+                            <video controls class="w-full h-full object-cover">
                                 <source src="{{ asset('upload/images/' ~ publications.fileName) }}" type="video/mp4">
                                 Votre navigateur ne supporte pas la lecture de vidéos.
                             </video>
                         {% endif %}
-                        <p class="absolute inset-0 flex items-center justify-center text-white border-gray-100 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                            Click to see more
+                        <p class="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50 opacity-0 transition-opacity duration-500 group-hover:opacity-20 group-hover:cursor-pointer">
+                        {{ publications.title }}
                         </p>
                     </div>
-                <p class="list-none">{{ publications.description }}</p>
-            </div>
-        <br>
-    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
     </div>
-</div>
 {% endblock %}
