@@ -22,6 +22,19 @@
             z-index: 40; /* Ensure it's below the modal but above the rest of the content */
         }
 
+        #main-content {
+            min-height: 100vh; /* Ensures the div grows with content */
+            padding: 2em; /* Adds padding inside the main-content div */
+        }
+
+        #main-content .grid {
+            gap: 2em; /* Adds consistent spacing between grid items */
+        }
+
+        #main-content .grid > div {
+            margin: 1em; /* Adds margin to each grid item */
+        }
+
         /* Ensure the modal content is scrollable */
         #modal-content {
             max-height: 70vh; /* Adjust this value as needed */
@@ -56,11 +69,11 @@
     </style>
 
     <!-- Main Content Section -->
-    <div class="flex justify-center text-white h-screen mt-2 mb-2 md:mt-12 md:mb-12" style="font-family: Baloo, 'Cooper Black';">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl w-full">
+    <div id="main-content" class="flex justify-center text-white py-8 md:py-12" style="font-family: Baloo, 'Cooper Black';">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl w-full p-4 gap-4">
             {% for publications in content %}
                 {% if publications.isPublished == true %}
-                    <div id="{{ publications.id }}" class="hover-sound flex flex-col place-items-center"
+                    <div id="{{ publications.id }}" class="hover-sound flex flex-col items-center"
                          data-id="{{ publications.id }}"
                          data-title="{{ publications.title|e('html_attr') }}"
                          data-description="{{ publications.description|e('html_attr') }}"
@@ -96,6 +109,7 @@
         </div>
     </div>
 
+
     <!-- Modal -->
     <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-opacity-50">
         <div class="relative bg-black rounded-lg border border-white text-white w-full max-w-3xl mx-4 my-8 overflow-hidden">
@@ -123,8 +137,8 @@
     </div>
 
     <!-- Contact Section -->
-    <div id="contact_section" class="grid grid-cols-1 lg:grid-cols-2 w-full text-white mt-24 mb-12 h-[75vh] place-items-center" style="font-family: Baloo, 'Cooper Black';">
-        <div id="socials" class="flex flex-col items-center justify-center w-full h-[75vh]">
+    <div id="contact_section" class="grid grid-cols-1 lg:grid-cols-2 w-full text-white mt-12 mb-12" style="font-family: Baloo, 'Cooper Black';">
+        <div id="socials" class="flex flex-col items-center justify-center w-full py-8 lg:py-0 lg:h-[75vh]">
             <div class="grid place-items-center w-11/12 gap-6">
                 <div class="border-solid border-2 rounded-2xl border-white p-3 text-center">
                     <h1>WORK WITH ME</h1>
@@ -142,7 +156,7 @@
             </div>
         </div>
 
-        <div id="contact_form" class="flex flex-col items-center justify-center w-full h-[75vh]">
+        <div id="contact_form" class="flex flex-col items-center justify-center w-full py-8 lg:py-0 lg:h-[75vh]">
             <form class="grid place-items-center w-11/12 gap-6">
                 <label class="border-solid border-2 rounded-2xl border-white w-3/4 p-2">
                     <input class="w-full bg-transparent outline-none text-white placeholder-white" type="text" name="name" placeholder="Name" required>
@@ -252,7 +266,7 @@
 
                     if (publication.isInstagramLinkActive) {
                         modalLinks.innerHTML += `
-                <a href="${publication.behanceLink}" target="_blank" rel="noopener noreferrer">
+                <a href="${publication.instagramLink}" target="_blank" rel="noopener noreferrer">
                     <img src="{{ asset('assets/instagram-logo.svg') }}" alt="Behance" class="w-12 h-12 b-4">
                 </a>
             `;
@@ -260,7 +274,7 @@
 
                     if (publication.isFacebookLinkActive) {
                         modalLinks.innerHTML += `
-                <a href="${publication.behanceLink}" target="_blank" rel="noopener noreferrer">
+                <a href="${publication.facebookLink}" target="_blank" rel="noopener noreferrer">
                     <img src="{{ asset('assets/facebook-logo.svg') }}" alt="Behance" class="w-12 h-12 b-4">
                 </a>
             `;
@@ -268,7 +282,7 @@
 
                     if (publication.isExternalWebsiteLinkActive) {
                         modalLinks.innerHTML += `
-                <a href="${publication.behanceLink}" target="_blank" rel="noopener noreferrer">
+                <a href="${publication.externalWebsiteLink}" target="_blank" rel="noopener noreferrer">
                     <img src="{{ asset('assets/web-logo.svg') }}" alt="Behance" class="w-12 h-12 b-4">
                 </a>
             `;
