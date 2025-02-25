@@ -1,8 +1,8 @@
 {# templates/modal.html.twig #}
 
 <!-- Modal Structure -->
-<div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white rounded-lg p-6 max-w-2xl w-full">
+<div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-opacity-50">
+    <div class="bg-black rounded-lg p-6 max-w-2xl w-full border-solid border-1 rounded-2xl border-white text-white">
         <h2 id="modal-title" class="text-2xl font-bold mb-4"></h2>
         <div id="modal-content">
             <!-- Content will be dynamically inserted here -->
@@ -12,28 +12,30 @@
 </div>
 
 <script>
-    function openModal(publication) {
+    console.log(publicationsData)
+
+    function openModal(publications) {
         // Get the modal and its elements
         const modal = document.getElementById('modal');
         const modalTitle = document.getElementById('modal-title');
         const modalContent = document.getElementById('modal-content');
 
         // Set the modal title
-        modalTitle.textContent = publication.title;
-
-        // Set the modal content based on the file type
-        if (publication.fileType === 'image') {
-            modalContent.innerHTML = `
-                <img class="w-full h-auto rounded-lg" src="/uploads/images/${publication.fileName}" alt="${publication.title}">
-            `;
-        } else if (publication.fileType === 'video') {
-            modalContent.innerHTML = `
-                <video controls class="w-full h-auto rounded-lg">
-                    <source src="/uploads/images/${publication.fileName}" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            `;
-        }
+        // modalTitle.textContent = publications.title;
+        //
+        // // Set the modal content based on the file type
+        // if (publications.fileType === 'image') {
+        //     modalContent.innerHTML = `
+        //         <img class="w-full h-auto rounded-lg" src="/uploads/images/${publications.fileName}" alt="${publications.title}">
+        //     `;
+        // } else if (publications.fileType === 'video') {
+        //     modalContent.innerHTML = `
+        //         <video controls class="w-full h-auto rounded-lg">
+        //             <source src="/uploads/images/${publications.fileName}" type="video/mp4">
+        //             Your browser does not support the video tag.
+        //         </video>
+        //     `;
+        // }
 
         // Display the modal
         modal.classList.remove('hidden');

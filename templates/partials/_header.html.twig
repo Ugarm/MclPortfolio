@@ -1,14 +1,14 @@
 <header class="bg-black text-white h-screen flex flex-col overflow-hidden">
     <!-- Header Banner -->
-    <div id="headerBanner" class="grid grid-cols-3 items-center h-16">
+    <div id="headerBanner" class="grid grid-cols-3 items-center h-16 p-8">
         <div id="languages" class="flex justify-start">
             <p class="mr-2 cursor-pointer">FR</p>
             <p class="mr-2 cursor-pointer">ES</p>
             <p class="mr-2 cursor-pointer">EN</p>
         </div>
         <div class="flex justify-center">
-            <p class="mr-2 font-baloo">Mexique [02:04]</p>
-            <p class="mr-2">France [02:04]</p>
+            <p class="mr-2 font-baloo">Mexique [<span id="paris-time"></span>]</p>
+            <p class="mr-2">France [<span id="mexico-time"></span>]</p>
         </div>
         <div class="flex justify-end">
             <p class="mr-2 cursor-pointer">About</p>
@@ -20,7 +20,7 @@
         <!-- Image Section -->
         <div class="flex justify-center items-center flex-grow relative">
             <img
-                    src="{{ asset('assets/landingPic.png') }}"
+                    src="{{ asset('assets/mitzi.gif') }}"
                     alt="Mitzi Castillo"
                     class="max-w-full max-h-[50vh] object-cover"
                     style="height: auto; width: auto;"
@@ -29,8 +29,8 @@
 
         <!-- Art Direction Text -->
         <div class="flex justify-center items-center">
-            <h1 class="text-2xl sm:text-3xl md:text-4xl" style="font-family: Baloo, 'Cooper Black';">
-                Art Direction + DESIGN + 3D
+            <h1 class="text-xl sm:text-xl md:text-2xl" style="font-family: Baloo, 'Cooper Black';">
+                Art Direction + Design + 3D
             </h1>
         </div>
 
@@ -44,4 +44,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function updateTime() {
+            const parisTime = new Date().toLocaleTimeString("fr-FR", { timeZone: "Europe/Paris" });
+            const mexicoTime = new Date().toLocaleTimeString("es-MX", { timeZone: "America/Mexico_City" });
+
+            document.getElementById("paris-time").textContent = parisTime;
+            document.getElementById("mexico-time").textContent = mexicoTime;
+        }
+
+        updateTime(); // Initial call
+        setInterval(updateTime, 1000);
+    </script>
 </header>
