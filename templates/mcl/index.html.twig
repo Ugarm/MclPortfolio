@@ -3,35 +3,316 @@
 {% block title %}Mitzi Castillo{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    body { background-color: black; }
-</style>
+    <style>
+        /* Global styles */
+        body { background-color: black; }
 
-    <div class="flex justify-center text-white mt-2 mb-2 md:mt-12 md:mb-12">
+        body.modal-open {
+            overflow: hidden; /* Prevent scrolling on the body */
+        }
+
+        body.modal-open::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(5px); /* Blur effect */
+            z-index: 40; /* Ensure it's below the modal but above the rest of the content */
+        }
+
+        /* Ensure the modal content is scrollable */
+        #modal-content {
+            max-height: 70vh; /* Adjust this value as needed */
+            overflow-y: auto; /* Enable vertical scrolling */
+            scroll-behavior: smooth; /* Smooth scrolling */
+        }
+
+        /* Custom scrollbar styles */
+        #modal-content::-webkit-scrollbar {
+            width: 8px; /* Width of the scrollbar */
+        }
+
+        #modal-content::-webkit-scrollbar-track {
+            background: #333; /* Color of the track */
+            border-radius: 4px;
+        }
+
+        #modal-content::-webkit-scrollbar-thumb {
+            background: #666; /* Color of the scrollbar thumb */
+            border-radius: 4px;
+        }
+
+        #modal-content::-webkit-scrollbar-thumb:hover {
+            background: #888; /* Color of the scrollbar thumb on hover */
+        }
+
+        /* Larger modal */
+        #modal > div {
+            width: 90%; /* Adjust the width */
+            max-width: 1000px; /* Larger max-width */
+        }
+    </style>
+
+    <!-- Main Content Section -->
+    <div class="flex justify-center text-white h-screen mt-2 mb-2 md:mt-12 md:mb-12" style="font-family: Baloo, 'Cooper Black';">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl w-full">
             {% for publications in content %}
-                <div id="{{ publications.id }}" class="flex flex-col place-items-center">
-                    <div class="group relative w-[300px] h-[200px] overflow-hidden"> <!-- Fixed size container -->
-                        {% if publications.fileType == 'image' %}
-                            <img
-                                    class="w-full h-full object-cover transition-all duration-500 group-hover:blur-sm rounded-lg"
-                                    src="{{ asset('uploads/images/' ~ publications.fileName) }}"
-                                    alt="{{ publications.title }}"
-                            >
-                        {% else %}
-                            <video controls class="w-full h-full object-cover">
-                                <source src="{{ asset('upload/images/' ~ publications.fileName) }}" type="video/mp4">
-                                Votre navigateur ne supporte pas la lecture de vidéos.
-                            </video>
-                        {% endif %}
-                        <p class="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50 opacity-0 transition-opacity duration-500 group-hover:opacity-20 group-hover:cursor-pointer">
-                        {{ publications.title }}
-                        </p>
+                {% if publications.isPublished == true %}
+                    <div id="{{ publications.id }}" class="hover-sound flex flex-col place-items-center"
+                         data-id="{{ publications.id }}"
+                         data-title="{{ publications.title|e('html_attr') }}"
+                         data-description="{{ publications.description|e('html_attr') }}"
+                         data-file-type="{{ publications.fileType }}"
+                         data-file-name="{{ publications.fileName }}"
+                         data-isBehanceLinkActive="{{ publications.isBehanceLinkActive }}"
+                         data-behanceLink="{{ publications.behanceLink }}"
+                         data-isInstagramLinkActive="{{ publications.isInstagramLinkActive }}"
+                         data-instagramLink="{{ publications.instagramLink }}"
+                         data-isFacebookLinkActive="{{ publications.isFacebookLinkActive }}"
+                         data-facebookLink="{{ publications.facebookLink }}"
+                         data-isExternalWebsiteLinkActive="{{ publications.isExternalWebsiteLinkActive }}"
+                         data-externalWebsiteLink="{{ publications.externalWebsiteLink }}"
+                         onclick="window.openModal(this)">
+                        <div class="group relative w-[300px] h-[200px] overflow-hidden">
+                            {% if publications.fileType == 'image' %}
+                                <img class="w-full h-full object-cover transition-all duration-500 group-hover:blur-sm rounded-lg"
+                                     src="{{ asset('uploads/images/' ~ publications.fileName) }}"
+                                     alt="{{ publications.title }}">
+                            {% else %}
+                                <video controls class="w-full h-full object-cover">
+                                    <source src="{{ asset('uploads/images/' ~ publications.fileName) }}" type="video/mp4">
+                                    Votre navigateur ne supporte pas la lecture de vidéos.
+                                </video>
+                            {% endif %}
+                            <p class="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50 opacity-0 transition-opacity duration-500 group-hover:opacity-20 group-hover:cursor-pointer">
+                                {{ publications.title }}
+                            </p>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-opacity-50">
+        <div class="relative bg-black rounded-lg border border-white text-white w-full max-w-3xl mx-4 my-8 overflow-hidden">
+            <div class="flex flex-col h-full">
+                <!-- Modal Header -->
+                <div class="flex justify-between items-center p-4 border-b border-gray-600">
+                    <h2 id="modal-title" class="text-2xl font-bold"></h2>
+                    <button onclick="window.closeModal()" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Modal Content (Scrollable) -->
+                <div id="modal-content" class="flex-grow overflow-y-auto p-6">
+                    <div class="flex flex-col items-center">
+                        <div id="modal-media" class="mb-4"></div>
+                        <div id="modalLinks" class="flex justify-center items-center space-x-4 mb-3"></div>
+                        <p id="modal-description" class="text-center"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div id="contact_section" class="grid grid-cols-1 lg:grid-cols-2 w-full text-white mt-24 mb-12 h-[75vh] place-items-center" style="font-family: Baloo, 'Cooper Black';">
+        <div id="socials" class="flex flex-col items-center justify-center w-full h-[75vh]">
+            <div class="grid place-items-center w-11/12 gap-6">
+                <div class="border-solid border-2 rounded-2xl border-white p-3 text-center">
+                    <h1>WORK WITH ME</h1>
+                </div>
+                <img src="{{ asset('assets/keys.png')}}" alt="keys" class="w-[320px] h-[115px] my-6">
+                <div id="contact_group" class="flex items-center justify-center space-x-6">
+                    <ul class="flex flex-col space-y-3">
+                        <li><a href="https://www.instagram.com/mitzicastilllo/" class="cursor-pointer" target="_blank" rel="noopener noreferrer">INSTAGRAM</a></li>
+                        <li><a href="https://google.com" class="cursor-pointer" target="_blank" rel="noopener noreferrer">LINKEDIN</a></li>
+                        <li><a href="https://www.behance.net/mitzicastillo" class="cursor-pointer" target="_blank" rel="noopener noreferrer">BEHANCE</a></li>
+                    </ul>
+                    <img src="{{ asset('assets/pointer_png2.png') }}" alt="pointer_image" class="w-[100px] h-[100px]">
+                </div>
+                <p>m-cl@outlook.com</p>
+            </div>
+        </div>
+
+        <div id="contact_form" class="flex flex-col items-center justify-center w-full h-[75vh]">
+            <form class="grid place-items-center w-11/12 gap-6">
+                <label class="border-solid border-2 rounded-2xl border-white w-3/4 p-2">
+                    <input class="w-full bg-transparent outline-none text-white placeholder-white" type="text" name="name" placeholder="Name" required>
+                </label>
+                <label class="border-solid border-2 rounded-2xl border-white w-3/4 p-2 h-48">
+                    <textarea class="w-full h-full bg-transparent outline-none text-white placeholder-white" name="message" placeholder="Message" required></textarea>
+                </label>
+                <label class="border-solid border-2 rounded-2xl border-white w-3/4 p-2">
+                    <input class="w-full bg-transparent outline-none text-white placeholder-white" type="email" name="email" placeholder="Email" required>
+                </label>
+                <div id="send_btn" class="w-3/4 text-center">
+                    <button type="submit" class="border-solid border-2 rounded-2xl border-white px-6 py-2 cursor-pointer">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sound = document.getElementById("hoverSound");
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMedia = document.getElementById('modal-media');
+            const modalDescription = document.getElementById('modal-description');
+            const modalLinks = document.getElementById('modalLinks')
+
+            // Hover sound functionality
+            const images = document.querySelectorAll(".hover-sound");
+            images.forEach(image => {
+                image.addEventListener("mouseenter", () => {
+                    sound.currentTime = 0; // Restart sound
+                    const playPromise = sound.play();
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .then(() => {
+                                console.log("Sound played successfully");
+                            })
+                            .catch((error) => {
+                                console.error("Error playing sound:", error);
+                            });
+                    }
+                });
+            });
+
+            // Modal functionality
+            window.openModal = function(element) {
+                console.log('Received element:', element);
+
+                if (!element || !(element instanceof HTMLElement)) {
+                    console.error('Invalid element:', element);
+                    return;
+                }
+
+                if (!modal || !modalTitle || !modalMedia || !modalDescription) {
+                    console.error('Modal elements not found');
+                    return;
+                }
+
+                try {
+                    const publication = {
+                        id: element.dataset.id,
+                        title: element.dataset.title,
+                        description: element.dataset.description,
+                        fileType: element.dataset.fileType,
+                        fileName: element.dataset.fileName,
+                        isBehanceLinkActive: element.dataset.isbehancelinkactive,
+                        behanceLink: element.dataset.behancelink,
+                        instagramLink: element.dataset.instagramlink,
+                        isInstagramLinkActive: element.dataset.isinstagramlinkactive,
+                        facebookLink: element.dataset.facebooklink,
+                        isFacebookLinkActive: element.dataset.isfacebooklinkactive,
+                        externalWebsiteLink: element.dataset.externalwebsitelink,
+                        isExternalWebsiteLinkActive: element.dataset.isexternalwebsitelinkactive,
+                    };
+
+                    console.log('Publication data:', publication);
+
+                    modalTitle.textContent = publication.title || 'No Title';
+                    modalDescription.textContent = publication.description || 'No Description';
+
+                    if (publication.fileType === 'image') {
+                        modalMedia.innerHTML = `
+                    <img class="object-contain max-w-full max-h-[50vh] rounded-lg"
+                         src="/uploads/images/${publication.fileName}"
+                         alt="${publication.title || 'Image'}">
+                `;
+                    } else if (publication.fileType === 'video') {
+                        modalMedia.innerHTML = `
+                    <video controls class="object-contain max-w-full max-h-[50vh] rounded-lg">
+                        <source src="/uploads/images/${publication.fileName}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                `;
+                    } else {
+                        modalMedia.innerHTML = '<p>Unsupported file type</p>';
+                    }
+
+
+                    if (publication.isBehanceLinkActive) {
+                        modalLinks.innerHTML += `
+                <a href="${publication.behanceLink}" target="_blank" rel="noopener noreferrer">
+                    <img src="{{ asset('assets/behance-logo.svg') }}" alt="Behance" class="w-12 h-12 b-4">
+                </a>
+            `;
+                    }
+
+                    if (publication.isInstagramLinkActive) {
+                        modalLinks.innerHTML += `
+                <a href="${publication.behanceLink}" target="_blank" rel="noopener noreferrer">
+                    <img src="{{ asset('assets/instagram-logo.svg') }}" alt="Behance" class="w-12 h-12 b-4">
+                </a>
+            `;
+                    }
+
+                    if (publication.isFacebookLinkActive) {
+                        modalLinks.innerHTML += `
+                <a href="${publication.behanceLink}" target="_blank" rel="noopener noreferrer">
+                    <img src="{{ asset('assets/facebook-logo.svg') }}" alt="Behance" class="w-12 h-12 b-4">
+                </a>
+            `;
+                    }
+
+                    if (publication.isExternalWebsiteLinkActive) {
+                        modalLinks.innerHTML += `
+                <a href="${publication.behanceLink}" target="_blank" rel="noopener noreferrer">
+                    <img src="{{ asset('assets/web-logo.svg') }}" alt="Behance" class="w-12 h-12 b-4">
+                </a>
+            `;
+                    }
+
+                    // Add blur effect to the body
+                    document.body.classList.add('modal-open');
+
+                    // Show the modal
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+
+                    // Add backdrop click listener
+                    modal.addEventListener('click', handleBackdropClick);
+                } catch (error) {
+                    console.error('Error in openModal:', error);
+                }
+            }
+
+            window.closeModal = function() {
+                if (!modal) {
+                    console.error('Modal element not found');
+                    return;
+                }
+
+                modalLinks.innerHTML = ``
+                // Remove blur effect from the body
+                document.body.classList.remove('modal-open');
+
+                // Hide the modal
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+
+                // Remove backdrop click listener
+                modal.removeEventListener('click', handleBackdropClick);
+            }
+
+            // Handle backdrop clicks
+            function handleBackdropClick(event) {
+                // Check if the click is outside the modal content
+                if (event.target === modal) {
+                    window.closeModal();
+                }
+            }
+        });
+    </script>
 {% endblock %}
