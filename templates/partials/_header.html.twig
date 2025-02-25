@@ -7,8 +7,8 @@
             <p class="mr-2 cursor-pointer">EN</p>
         </div>
         <div class="flex justify-center">
-            <p class="mr-2 font-baloo">Mexique [<span id="paris-time"></span>]</p>
-            <p class="mr-2">France [<span id="mexico-time"></span>]</p>
+            <p class="mr-2 font-baloo">Mexique [<span id="mexico-time"></span>]</p>
+            <p class="mr-2">France [<span id="paris-time"></span>]</p>
         </div>
         <div class="flex justify-end">
             <p class="mr-2 cursor-pointer">About</p>
@@ -36,7 +36,7 @@
 
         <!-- Scroll Section -->
         <div class="flex justify-center pb-8">
-            <div class="group flex flex-col items-center cursor-pointer">
+            <div class="group flex flex-col items-center cursor-pointer" onclick="document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'nearest' });">
                 <p class="group-hover:opacity-80 group-hover:scale-110 transition ease-in duration-300">
                     SCROLL
                 </p>
@@ -47,8 +47,15 @@
 
     <script>
         function updateTime() {
-            const parisTime = new Date().toLocaleTimeString("fr-FR", { timeZone: "Europe/Paris" });
-            const mexicoTime = new Date().toLocaleTimeString("es-MX", { timeZone: "America/Mexico_City" });
+            const parisTime = new Date().toLocaleTimeString("fr-FR", {
+                timeZone: "Europe/Paris",
+                hourCycle: "h23"
+            });
+
+            const mexicoTime = new Date().toLocaleTimeString("es-MX", {
+                timeZone: "America/Mexico_City",
+                hourCycle: "h23"
+            });
 
             document.getElementById("paris-time").textContent = parisTime;
             document.getElementById("mexico-time").textContent = mexicoTime;
