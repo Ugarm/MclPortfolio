@@ -28,12 +28,12 @@ class ContentCrudController extends AbstractCrudController
         $isCreating = $pageName === Crud::PAGE_NEW;
 
         return [
-            BooleanField::new('isPublished'),
-            TextField::new('title')
+            BooleanField::new('isPublished', 'Publish'),
+            TextField::new('title', 'Title')
                 ->setRequired(true),
-            TextField::new('description')
+            TextField::new('description', 'Description')
                 ->setRequired(true),
-            TextField::new('file')
+            TextField::new('file', 'File')
                 ->setFormType(VichFileType::class)
                 ->setFormTypeOptions([
                     'allow_delete' => true, // Enable file deletion
