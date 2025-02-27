@@ -3,7 +3,42 @@
 {% block title %}Mitzi Castillo{% endblock %}
 
 {% block body %}
+    <div class="flash-messages fixed top-4 right-4 z-50 w-80">
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success text-white p-4 mb-4 rounded shadow-lg">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger text-white p-4 mb-4 rounded shadow-lg">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+
     <style>
+        .alert {
+            animation: fadeIn 0.5s, fadeOut 0.5s 5s forwards;
+        }
+
+        .alert-success {
+            background-color: rgba(16, 185, 129, 0.9);
+        }
+
+        .alert-danger {
+            background-color: rgba(239, 68, 68, 0.9);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
         /* Global styles */
         body { background-color: black; }
 
@@ -146,32 +181,46 @@
                 <img src="{{ asset('assets/keys.png')}}" alt="keys" class="w-[320px] h-[115px] my-6">
                 <div id="contact_group" class="flex items-center justify-center space-x-6">
                     <ul class="flex flex-col space-y-3">
-                        <li><a href="https://www.instagram.com/mitzicastilllo/" class="cursor-pointer" target="_blank" rel="noopener noreferrer">INSTAGRAM</a></li>
-                        <li><a href="https://google.com" class="cursor-pointer" target="_blank" rel="noopener noreferrer">LINKEDIN</a></li>
-                        <li><a href="https://www.behance.net/mitzicastillo" class="cursor-pointer" target="_blank" rel="noopener noreferrer">BEHANCE</a></li>
+                        <li><a href="{{ socials.instagram }}" class="cursor-pointer" target="_blank" rel="noopener noreferrer">INSTAGRAM</a></li>
+                        <li><a href="{{ socials.linkedin }}" class="cursor-pointer" target="_blank" rel="noopener noreferrer">LINKEDIN</a></li>
+                        <li><a href="{{ socials.behance }}" class="cursor-pointer" target="_blank" rel="noopener noreferrer">BEHANCE</a></li>
                     </ul>
                     <img src="{{ asset('assets/pointer_png2.png') }}" alt="pointer_image" class="w-[100px] h-[100px]">
                 </div>
-                <p>m-cl@outlook.com</p>
+                {% if socials.isEmailVisible %}
+                <p>{{ socials.email }}</p>
+                {% endif %}
             </div>
         </div>
 
+        {% if socials.isEmailVisible %}
         <div id="contact_form" class="flex flex-col items-center justify-center w-full py-8 lg:py-0 lg:h-[75vh]">
-            <form class="grid place-items-center w-11/12 gap-6">
-                <label class="border-solid border-2 rounded-2xl border-white w-3/4 p-2">
-                    <input class="w-full bg-transparent outline-none text-white placeholder-white" type="text" name="name" placeholder="Name" required>
-                </label>
-                <label class="border-solid border-2 rounded-2xl border-white w-3/4 p-2 h-48">
-                    <textarea class="w-full h-full bg-transparent outline-none text-white placeholder-white" name="message" placeholder="Message" required></textarea>
-                </label>
-                <label class="border-solid border-2 rounded-2xl border-white w-3/4 p-2">
-                    <input class="w-full bg-transparent outline-none text-white placeholder-white" type="email" name="email" placeholder="Email" required>
-                </label>
-                <div id="send_btn" class="w-3/4 text-center">
-                    <button type="submit" class="border-solid border-2 rounded-2xl border-white px-6 py-2 cursor-pointer">Send</button>
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success mb-4">
+                    {{ message }}
                 </div>
-            </form>
+            {% endfor %}
+
+            {{ form_start(form, {'attr': {'class': 'grid place-items-center w-11/12 gap-6'}}) }}
+            <div class="border-solid border-2 rounded-2xl border-white w-3/4 p-2">
+                {{ form_widget(form.name, {'attr': {'class': 'w-full bg-transparent outline-none text-white placeholder-white', 'placeholder': 'Name'}}) }}
+            </div>
+            <div class="border-solid border-2 rounded-2xl border-white w-3/4 p-2 h-48">
+                {{ form_widget(form.message, {'attr': {'class': 'w-full h-full bg-transparent outline-none text-white placeholder-white', 'placeholder': 'Message'}}) }}
+            </div>
+            <div class="border-solid border-2 rounded-2xl border-white w-3/4 p-2">
+                {{ form_widget(form.email, {'attr': {'class': 'w-full bg-transparent outline-none text-white placeholder-white', 'placeholder': 'Email'}}) }}
+            </div>
+            <div id="send_btn" class="w-3/4 text-center">
+                <button type="submit" class="border-solid border-2 rounded-2xl border-white px-6 py-2 cursor-pointer">Send</button>
+            </div>
+            {{ form_end(form) }}
         </div>
+        {% else %}
+    <div id="contact_form" class="flex flex-col items-center justify-center w-3/4 py-8 lg:py-0 lg:h-[75vh]">
+            <h2>I currently can't be reached through my website, please feel free to land a DM on any of my socials. Hope to see you soon !</h2>
+    </div>
+        {% endif %}
     </div>
 
     <!-- JavaScript -->
