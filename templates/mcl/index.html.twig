@@ -18,6 +18,33 @@
     </div>
 
     <style>
+            body,
+            #main-content,
+            .modal-container,
+            #modal-title,
+            #modal-description,
+            #about-modal-content,
+            #contact_section,
+            #socials,
+            #contact_form {
+                color: white !important;
+            }
+
+            #modal-content,
+            #about-modal-content {
+                color: white !important;
+                text-shadow:
+                            0 0 4px rgba(202, 228, 255, 0.4),  /* Soft blue glow */
+                            0 0 8px rgba(202, 228, 255, 0.2);   /* Wider faint glow */
+
+            }
+
+        .modal-container:hover #modal-title {
+            text-shadow:
+                0 0 6px rgba(202, 228, 255, 0.6),
+                0 0 12px rgba(202, 228, 255, 0.3);
+        }
+
         .alert {
             animation: fadeIn 0.5s, fadeOut 0.5s 5s forwards;
         }
@@ -39,130 +66,225 @@
             from { opacity: 1; }
             to { opacity: 0; }
         }
-        /* Global styles */
-        body { background-color: black; }
 
-        body.modal-open {
-            overflow: hidden; /* Prevent scrolling on the body */
+        body {
+            font-family: Baloo, 'Cooper Black';
+            background: linear-gradient(-45deg,
+                #0f0524 0%,  /* Deep purple */
+                #1a0933 25%, /* Royal purple */
+                #240b41 50%, /* Violet */
+                #1a0933 75%, /* Royal purple */
+                #0f0524 100% /* Deep purple */
+            );
+            background-size: 400% 400%;
+            animation: gradientFlow 24s ease infinite;
+            margin: 0;
+            min-height: 100vh;
         }
 
-        body.modal-open::before {
+            @keyframes gradientFlow {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(8px) brightness(1.05);
+        z-index: 40;
+        opacity: 0.96;
+        mix-blend-mode: soft-light;
+        animation: colorFlow 16s ease-in-out infinite alternate;
+        background: linear-gradient(
+            135deg,
+            rgba(220, 190, 255, 0.25) 0%,
+            rgba(190, 220, 255, 0.3) 100%
+        );
+        animation: backdropPulse 32s ease infinite
+            }
+            @keyframes backdropPulse {
+                0% { background-color: rgba(15, 5, 36, 0.4); }
+                50% { background-color: rgba(26, 9, 51, 0.3); }
+                100% { background-color: rgba(15, 5, 36, 0.4); }
+            }
+
+            @keyframes colorFlow {
+                0% {
+                    background: linear-gradient(
+                        135deg,
+                        rgba(220, 190, 255, 0.25) 0%,
+                        rgba(190, 220, 255, 0.3) 100%
+                    );
+                }
+                33% {
+                    background: linear-gradient(
+                        135deg,
+                        rgba(210, 200, 255, 0.25) 0%,
+                        rgba(200, 210, 255, 0.3) 100%
+                    );
+                }
+                66% {
+                    background: linear-gradient(
+                        135deg,
+                        rgba(200, 210, 255, 0.25) 0%,
+                        rgba(210, 200, 255, 0.3) 100%
+                    );
+                }
+                100% {
+                    background: linear-gradient(
+                        135deg,
+                        rgba(190, 220, 255, 0.25) 0%,
+                        rgba(220, 190, 255, 0.3) 100%
+                    );
+                }
+            }
+
+        .modal-backdrop::after {
             content: '';
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            backdrop-filter: blur(5px); /* Blur effect */
-            z-index: 40; /* Ensure it's below the modal but above the rest of the content */
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.02) 0%, transparent 50%);
+            animation: pulseGlow 24s ease infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.2); }
         }
 
         #main-content {
-            min-height: 100vh; /* Ensures the div grows with content */
-            padding: 2em; /* Adds padding inside the main-content div */
+            min-height: 100vh;
+            padding: 2em;
         }
 
-        #main-content .grid {
-            gap: 2em; /* Adds consistent spacing between grid items */
+        .modal-container {
+            position: relative;
+            width: 90%;
+            max-width: 1000px !important;
+            height: auto !important;
+            margin: 2rem auto !important;
+            background-color: rgba(15, 15, 35, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3);
+            border-radius: 0.5rem;
+            z-index: 50;
         }
 
-        #main-content .grid > div {
-            margin: 1em; /* Adds margin to each grid item */
+        #modal-content,
+        #about-modal-content {
+            max-height: 70vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
         }
 
-        /* Ensure the modal content is scrollable */
-        #modal-content {
-            max-height: 70vh; /* Adjust this value as needed */
-            overflow-y: auto; /* Enable vertical scrolling */
-            scroll-behavior: smooth; /* Smooth scrolling */
+        #modal-content::-webkit-scrollbar,
+        #about-modal-content::-webkit-scrollbar {
+            width: 8px;
         }
 
-        /* Custom scrollbar styles */
-        #modal-content::-webkit-scrollbar {
-            width: 8px; /* Width of the scrollbar */
-        }
-
-        #modal-content::-webkit-scrollbar-track {
-            background: #333; /* Color of the track */
+        #modal-content::-webkit-scrollbar-track,
+        #about-modal-content::-webkit-scrollbar-track {
+            background: #333;
             border-radius: 4px;
         }
 
-        #modal-content::-webkit-scrollbar-thumb {
-            background: #666; /* Color of the scrollbar thumb */
+        #modal-content::-webkit-scrollbar-thumb,
+        #about-modal-content::-webkit-scrollbar-thumb {
+            background: #666;
             border-radius: 4px;
         }
 
-        #modal-content::-webkit-scrollbar-thumb:hover {
-            background: #888; /* Color of the scrollbar thumb on hover */
+        #modal-content::-webkit-scrollbar-thumb:hover,
+        #about-modal-content::-webkit-scrollbar-thumb:hover {
+            background: #888;
         }
 
-        /* Larger modal */
-        #modal > div {
-            width: 90%; /* Adjust the width */
-            max-width: 1000px; /* Larger max-width */
+        .hover-sound .group img {
+            transition: filter 0.5s;
+        }
+
+        .hover-sound .group:hover img {
+            filter: blur(4px);
+        }
+
+        .hover-sound .group p {
+            transition: opacity 0.5s;
+        }
+
+        .border-custom {
+            border: 2px solid white;
+            border-radius: 1rem;
         }
     </style>
 
     <!-- Main Content Section -->
-    <div id="main-content" class="flex justify-center text-white py-8 md:py-12" style="font-family: Baloo, 'Cooper Black';">
+    <main id="main-content" class="flex justify-center text-white py-8 md:py-12">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl w-full p-4 gap-4">
-            {% for publications in content %}
-                {% if publications.isPublished == true %}
-                    <div id="{{ publications.id }}" class="hover-sound flex flex-col items-center"
-                         data-id="{{ publications.id }}"
-                         data-title="{{ publications.title|e('html_attr') }}"
-                         data-description="{{ publications.description|e('html_attr') }}"
-                         data-file-type="{{ publications.fileType }}"
-                         data-file-name="{{ publications.fileName }}"
-                         data-isBehanceLinkActive="{{ publications.isBehanceLinkActive }}"
-                         data-behanceLink="{{ publications.behanceLink }}"
-                         data-isInstagramLinkActive="{{ publications.isInstagramLinkActive }}"
-                         data-instagramLink="{{ publications.instagramLink }}"
-                         data-isFacebookLinkActive="{{ publications.isFacebookLinkActive }}"
-                         data-facebookLink="{{ publications.facebookLink }}"
-                         data-isExternalWebsiteLinkActive="{{ publications.isExternalWebsiteLinkActive }}"
-                         data-externalWebsiteLink="{{ publications.externalWebsiteLink }}"
-                         onclick="window.openModal(this)">
-                        <div class="group relative w-[300px] h-[200px] overflow-hidden">
-                            {% if publications.fileType == 'image' %}
-                                <img class="w-full h-full object-cover transition-all duration-500 group-hover:blur-sm rounded-lg"
-                                     src="{{ asset('uploads/images/' ~ publications.fileName) }}"
-                                     alt="{{ publications.title }}">
-                            {% else %}
-                                <video controls class="w-full h-full object-cover">
-                                    <source src="{{ asset('uploads/images/' ~ publications.fileName) }}" type="video/mp4">
-                                    Votre navigateur ne supporte pas la lecture de vidéos.
-                                </video>
-                            {% endif %}
-                            <p class="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50 opacity-0 transition-opacity duration-500 group-hover:opacity-20 group-hover:cursor-pointer">
-                                {{ publications.title }}
-                            </p>
-                        </div>
+            {% for publication in content|filter(p => p.isPublished) %}
+                <div id="{{ publication.id }}"
+                     class="hover-sound flex flex-col items-center cursor-pointer"
+                     data-id="{{ publication.id }}"
+                     data-title="{{ publication.title|e('html_attr') }}"
+                     data-description="{{ publication.description|e('html_attr') }}"
+                     data-file-type="{{ publication.fileType }}"
+                     data-file-name="{{ publication.fileName }}"
+                     data-is-behance-link-active="{{ publication.isBehanceLinkActive }}"
+                     data-behance-link="{{ publication.behanceLink }}"
+                     data-is-instagram-link-active="{{ publication.isInstagramLinkActive }}"
+                     data-instagram-link="{{ publication.instagramLink }}"
+                     data-is-facebook-link-active="{{ publication.isFacebookLinkActive }}"
+                     data-facebook-link="{{ publication.facebookLink }}"
+                     data-is-external-website-link-active="{{ publication.isExternalWebsiteLinkActive }}"
+                     data-external-website-link="{{ publication.externalWebsiteLink }}"
+                     onclick="window.openModal(this)">
+
+                    <div class="group relative w-[300px] h-[200px] overflow-hidden">
+                        {% if publication.fileType == 'image' %}
+                            <img class="w-full h-full object-cover rounded-lg"
+                                 src="{{ asset('uploads/images/' ~ publication.fileName) }}"
+                                 alt="{{ publication.title }}">
+                        {% else %}
+                            <video controls class="w-full h-full object-cover rounded-lg">
+                                <source src="{{ asset('uploads/images/' ~ publication.fileName) }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        {% endif %}
+                        <p class="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50 opacity-0 group-hover:opacity-20">
+                            {{ publication.title }}
+                        </p>
                     </div>
-                {% endif %}
+                </div>
             {% endfor %}
         </div>
-    </div>
+    </main>
 
-
-    <!-- Modal -->
-    <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-opacity-50">
-        <div class="relative bg-black rounded-lg border border-white text-white w-full max-w-3xl mx-4 my-8 overflow-hidden">
+    <!-- Project Modal -->
+    <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop" onclick="window.closeModal()"></div>
+        <div class="modal-container">
             <div class="flex flex-col h-full">
-                <!-- Modal Header -->
                 <div class="flex justify-between items-center p-4 border-b border-gray-600">
                     <h2 id="modal-title" class="text-2xl font-bold"></h2>
                     <button onclick="window.closeModal()" class="text-gray-400 hover:text-white">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
-
-                <!-- Modal Content (Scrollable) -->
                 <div id="modal-content" class="flex-grow overflow-y-auto p-6">
                     <div class="flex flex-col items-center">
-                        <div id="modal-media" class="mb-4"></div>
+                        <div id="modal-media" class="mb-4 w-full"></div>
                         <div id="modalLinks" class="flex justify-center items-center space-x-4 mb-3"></div>
                         <p id="modal-description" class="text-center"></p>
                     </div>
@@ -171,211 +293,204 @@
         </div>
     </div>
 
+    <!-- About Modal -->
+    <div id="about-modal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop" onclick="window.closeAboutModal()"></div>
+        <div class="modal-container">
+            <div class="flex flex-col h-full">
+                <div class="flex justify-between items-center p-4 border-b border-gray-600">
+                    <h2 class="text-2xl font-bold">About</h2>
+                    <button onclick="window.closeAboutModal()" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="about-modal-content" class="flex-grow overflow-y-auto p-6">
+                    <div class="flex flex-col items-center">
+                        <p class="text-center">This is where your about text would go.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Contact Section -->
-    <div id="contact_section" class="grid grid-cols-1 lg:grid-cols-2 w-full text-white mt-12 mb-12" style="font-family: Baloo, 'Cooper Black';">
+    <section id="contact_section" class="grid grid-cols-1 lg:grid-cols-2 w-full text-white mt-12 mb-12">
         <div id="socials" class="flex flex-col items-center justify-center w-full py-8 lg:py-0 lg:h-[75vh]">
             <div class="grid place-items-center w-11/12 gap-6">
-                <div class="border-solid border-2 rounded-2xl border-white p-3 text-center">
+                <div class="border-custom p-3 text-center">
                     <h1>WORK WITH ME</h1>
                 </div>
                 <img src="{{ asset('assets/keys.png')}}" alt="keys" class="w-[320px] h-[115px] my-6">
                 <div id="contact_group" class="flex items-center justify-center space-x-6">
                     <ul class="flex flex-col space-y-3">
-                        <li><a href="{{ socials.instagram }}" class="cursor-pointer" target="_blank" rel="noopener noreferrer">INSTAGRAM</a></li>
-                        <li><a href="{{ socials.linkedin }}" class="cursor-pointer" target="_blank" rel="noopener noreferrer">LINKEDIN</a></li>
-                        <li><a href="{{ socials.behance }}" class="cursor-pointer" target="_blank" rel="noopener noreferrer">BEHANCE</a></li>
+                        <li><a href="{{ socials.instagram }}" class="cursor-pointer hover:underline" target="_blank" rel="noopener noreferrer">INSTAGRAM</a></li>
+                        <li><a href="{{ socials.linkedin }}" class="cursor-pointer hover:underline" target="_blank" rel="noopener noreferrer">LINKEDIN</a></li>
+                        <li><a href="{{ socials.behance }}" class="cursor-pointer hover:underline" target="_blank" rel="noopener noreferrer">BEHANCE</a></li>
                     </ul>
-                    <img src="{{ asset('assets/pointer_png2.png') }}" alt="pointer_image" class="w-[100px] h-[100px]">
+                    <img src="{{ asset('assets/pointer_png2.png') }}" alt="pointer" class="w-[100px] h-[100px]">
                 </div>
                 {% if socials.isEmailVisible %}
-                <p>{{ socials.email }}</p>
+                    <p>{{ socials.email }}</p>
                 {% endif %}
             </div>
         </div>
 
         {% if socials.isEmailVisible %}
-        <div id="contact_form" class="flex flex-col items-center justify-center w-full py-8 lg:py-0 lg:h-[75vh]">
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success mb-4">
-                    {{ message }}
-                </div>
-            {% endfor %}
-
-            {{ form_start(form, {'attr': {'class': 'grid place-items-center w-11/12 gap-6'}}) }}
-            <div class="border-solid border-2 rounded-2xl border-white w-3/4 p-2">
-                {{ form_widget(form.name, {'attr': {'class': 'w-full bg-transparent outline-none text-white placeholder-white', 'placeholder': 'Name'}}) }}
+            <div id="contact_form" class="flex flex-col items-center justify-center w-full py-8 lg:py-0 lg:h-[75vh]">
+                {{ form_start(form, {'attr': {'class': 'grid place-items-center w-11/12 gap-6'}}) }}
+                    <div class="border-custom w-3/4 p-2">
+                        {{ form_widget(form.name, {'attr': {
+                            'class': 'w-full bg-transparent outline-none text-white placeholder-white',
+                            'placeholder': 'Name'
+                        }}) }}
+                    </div>
+                    <div class="border-custom w-3/4 p-2 h-48">
+                        {{ form_widget(form.message, {'attr': {
+                            'class': 'w-full h-full bg-transparent outline-none text-white placeholder-white',
+                            'placeholder': 'Message'
+                        }}) }}
+                    </div>
+                    <div class="border-custom w-3/4 p-2">
+                        {{ form_widget(form.email, {'attr': {
+                            'class': 'w-full bg-transparent outline-none text-white placeholder-white',
+                            'placeholder': 'Email'
+                        }}) }}
+                    </div>
+                    <div id="send_btn" class="w-3/4 text-center">
+                        <button type="submit" class="border-custom px-6 py-2 cursor-pointer hover:bg-white hover:text-black transition">
+                            Send
+                        </button>
+                    </div>
+                {{ form_end(form) }}
             </div>
-            <div class="border-solid border-2 rounded-2xl border-white w-3/4 p-2 h-48">
-                {{ form_widget(form.message, {'attr': {'class': 'w-full h-full bg-transparent outline-none text-white placeholder-white', 'placeholder': 'Message'}}) }}
-            </div>
-            <div class="border-solid border-2 rounded-2xl border-white w-3/4 p-2">
-                {{ form_widget(form.email, {'attr': {'class': 'w-full bg-transparent outline-none text-white placeholder-white', 'placeholder': 'Email'}}) }}
-            </div>
-            <div id="send_btn" class="w-3/4 text-center">
-                <button type="submit" class="border-solid border-2 rounded-2xl border-white px-6 py-2 cursor-pointer">Send</button>
-            </div>
-            {{ form_end(form) }}
-        </div>
         {% else %}
-    <div id="contact_form" class="flex flex-col items-center justify-center w-3/4 py-8 lg:py-0 lg:h-[75vh]">
-            <h2>I currently can't be reached through my website, please feel free to land a DM on any of my socials. Hope to see you soon !</h2>
-    </div>
+            <div id="contact_form" class="flex flex-col items-center justify-center w-3/4 py-8 lg:py-0 lg:h-[75vh]">
+                <h2 class="text-center">
+                    I currently can't be reached through my website. Please feel free to send a DM on any of my socials. Hope to see you soon!
+                </h2>
+            </div>
         {% endif %}
-    </div>
+    </section>
 
-    <!-- JavaScript -->
     <script>
+        // Prevent modal content clicks from closing the modal
+        function stopPropagation(event) {
+            event.stopPropagation();
+        }
+
+        // Attach the event listener to all modal content elements
         document.addEventListener('DOMContentLoaded', function() {
-            const sound = document.getElementById("hoverSound");
-            const modal = document.getElementById('modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalMedia = document.getElementById('modal-media');
-            const modalDescription = document.getElementById('modal-description');
-            const modalLinks = document.getElementById('modalLinks')
-
-            // Hover sound functionality
-            const images = document.querySelectorAll(".hover-sound");
-            images.forEach(image => {
-                image.addEventListener("mouseenter", () => {
-                    sound.currentTime = 0; // Restart sound
-                    const playPromise = sound.play();
-                    if (playPromise !== undefined) {
-                        playPromise
-                            .then(() => {
-                                console.log("Sound played successfully");
-                            })
-                            .catch((error) => {
-                                console.error("Error playing sound:", error);
-                            });
-                    }
-                });
+            document.querySelectorAll('.modal-container').forEach(modalContent => {
+                modalContent.addEventListener('click', stopPropagation);
             });
-
-            // Modal functionality
-            window.openModal = function(element) {
-                console.log('Received element:', element);
-
-                if (!element || !(element instanceof HTMLElement)) {
-                    console.error('Invalid element:', element);
-                    return;
-                }
-
-                if (!modal || !modalTitle || !modalMedia || !modalDescription) {
-                    console.error('Modal elements not found');
-                    return;
-                }
-
-                try {
-                    const publication = {
-                        id: element.dataset.id,
-                        title: element.dataset.title,
-                        description: element.dataset.description,
-                        fileType: element.dataset.fileType,
-                        fileName: element.dataset.fileName,
-                        isBehanceLinkActive: element.dataset.isbehancelinkactive,
-                        behanceLink: element.dataset.behancelink,
-                        instagramLink: element.dataset.instagramlink,
-                        isInstagramLinkActive: element.dataset.isinstagramlinkactive,
-                        facebookLink: element.dataset.facebooklink,
-                        isFacebookLinkActive: element.dataset.isfacebooklinkactive,
-                        externalWebsiteLink: element.dataset.externalwebsitelink,
-                        isExternalWebsiteLinkActive: element.dataset.isexternalwebsitelinkactive,
-                    };
-
-                    console.log('Publication data:', publication);
-
-                    modalTitle.textContent = publication.title || 'No Title';
-                    modalDescription.textContent = publication.description || 'No Description';
-
-                    if (publication.fileType === 'image') {
-                        modalMedia.innerHTML = `
-                    <img class="object-contain max-w-full max-h-[50vh] rounded-lg"
-                         src="/uploads/images/${publication.fileName}"
-                         alt="${publication.title || 'Image'}">
-                `;
-                    } else if (publication.fileType === 'video') {
-                        modalMedia.innerHTML = `
-                    <video controls class="object-contain max-w-full max-h-[50vh] rounded-lg">
-                        <source src="/uploads/images/${publication.fileName}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                `;
-                    } else {
-                        modalMedia.innerHTML = '<p>Unsupported file type</p>';
-                    }
-
-
-                    if (publication.isBehanceLinkActive) {
-                        modalLinks.innerHTML += `
-                <a href="${publication.behanceLink}" target="_blank" rel="noopener noreferrer">
-                    <img src="{{ asset('assets/behance-logo.svg') }}" alt="Behance" class="w-12 h-12 b-4">
-                </a>
-            `;
-                    }
-
-                    if (publication.isInstagramLinkActive) {
-                        modalLinks.innerHTML += `
-                <a href="${publication.instagramLink}" target="_blank" rel="noopener noreferrer">
-                    <img src="{{ asset('assets/instagram-logo.svg') }}" alt="Behance" class="w-12 h-12 b-4">
-                </a>
-            `;
-                    }
-
-                    if (publication.isFacebookLinkActive) {
-                        modalLinks.innerHTML += `
-                <a href="${publication.facebookLink}" target="_blank" rel="noopener noreferrer">
-                    <img src="{{ asset('assets/facebook-logo.svg') }}" alt="Behance" class="w-12 h-12 b-4">
-                </a>
-            `;
-                    }
-
-                    if (publication.isExternalWebsiteLinkActive) {
-                        modalLinks.innerHTML += `
-                <a href="${publication.externalWebsiteLink}" target="_blank" rel="noopener noreferrer">
-                    <img src="{{ asset('assets/web-logo.svg') }}" alt="Behance" class="w-12 h-12 b-4">
-                </a>
-            `;
-                    }
-
-                    // Add blur effect to the body
-                    document.body.classList.add('modal-open');
-
-                    // Show the modal
-                    modal.classList.remove('hidden');
-                    modal.classList.add('flex');
-
-                    // Add backdrop click listener
-                    modal.addEventListener('click', handleBackdropClick);
-                } catch (error) {
-                    console.error('Error in openModal:', error);
-                }
-            }
-
-            window.closeModal = function() {
-                if (!modal) {
-                    console.error('Modal element not found');
-                    return;
-                }
-
-                modalLinks.innerHTML = ``
-                // Remove blur effect from the body
-                document.body.classList.remove('modal-open');
-
-                // Hide the modal
-                modal.classList.remove('flex');
-                modal.classList.add('hidden');
-
-                // Remove backdrop click listener
-                modal.removeEventListener('click', handleBackdropClick);
-            }
-
-            // Handle backdrop clicks
-            function handleBackdropClick(event) {
-                // Check if the click is outside the modal content
-                if (event.target === modal) {
-                    window.closeModal();
-                }
-            }
         });
+
+        window.openModal = function(element) {
+            // Extract data attributes
+            const data = {
+                title: element.dataset.title,
+                description: element.dataset.description,
+                fileType: element.dataset.fileType,
+                fileName: element.dataset.fileName,
+                links: {
+                    behance: {
+                        active: element.dataset.isBehanceLinkActive === 'true',
+                        url: element.dataset.behanceLink
+                    },
+                    instagram: {
+                        active: element.dataset.isInstagramLinkActive === 'true',
+                        url: element.dataset.instagramLink
+                    },
+                    facebook: {
+                        active: element.dataset.isFacebookLinkActive === 'true',
+                        url: element.dataset.facebookLink
+                    },
+                    website: {
+                        active: element.dataset.isExternalWebsiteLinkActive === 'true',
+                        url: element.dataset.externalWebsiteLink
+                    }
+                }
+            };
+
+            // Set modal content
+            document.getElementById('modal-title').textContent = data.title;
+            document.getElementById('modal-description').textContent = data.description;
+
+            // Set media content
+            const modalMedia = document.getElementById('modal-media');
+            modalMedia.innerHTML = '';
+
+            if (data.fileType === 'image') {
+                const img = document.createElement('img');
+                img.src = `/uploads/images/${data.fileName}`;
+                img.alt = data.title;
+                img.className = 'w-full h-auto rounded-lg';
+                modalMedia.appendChild(img);
+            } else if (data.fileType === 'video') {
+                const video = document.createElement('video');
+                video.controls = true;
+                video.className = 'w-full h-auto rounded-lg';
+                const source = document.createElement('source');
+                source.src = `/uploads/images/${data.fileName}`;
+                source.type = 'video/mp4';
+                video.appendChild(source);
+                modalMedia.appendChild(video);
+            }
+
+            // Create links
+            const modalLinks = document.getElementById('modalLinks');
+            modalLinks.innerHTML = '';
+
+            for (const [platform, linkData] of Object.entries(data.links)) {
+                if (linkData.active && linkData.url) {
+                    modalLinks.appendChild(createLinkButton(
+                        platform.charAt(0).toUpperCase() + platform.slice(1),
+                        linkData.url
+                    ));
+                }
+            }
+
+            // Show modal
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+            document.body.classList.add('modal-open');
+        };
+
+        window.closeModal = function() {
+            document.getElementById('modal').classList.remove('flex');
+            document.getElementById('modal').classList.add('hidden');
+            document.body.classList.remove('modal-open');
+
+            // Clear modal content
+            document.getElementById('modal-title').textContent = '';
+            document.getElementById('modal-description').textContent = '';
+            document.getElementById('modal-media').innerHTML = '';
+            document.getElementById('modalLinks').innerHTML = '';
+        };
+
+        // About Modal Functions
+        window.openAboutModal = function() {
+            document.getElementById('about-modal').classList.remove('hidden');
+            document.getElementById('about-modal').classList.add('flex');
+            document.body.classList.add('modal-open');
+        };
+
+        window.closeAboutModal = function() {
+            document.getElementById('about-modal').classList.remove('flex');
+            document.getElementById('about-modal').classList.add('hidden');
+            document.body.classList.remove('modal-open');
+        };
+
+        function createLinkButton(name, href) {
+            const link = document.createElement('a');
+            link.href = href;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.className = 'border border-white rounded px-3 py-1 text-sm hover:bg-white hover:text-black transition';
+            link.textContent = name;
+            return link;
+        }
     </script>
 {% endblock %}
