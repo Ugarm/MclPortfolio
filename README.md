@@ -1,7 +1,7 @@
 # 🌐 MCL Portfolio
 
 A professional portfolio built with Symfony for a real client, designed to showcase their projects and technical skills in a dynamic and responsive way.
-It is published here with their kind authorization to showcase my work.
+# It is published here with their kind authorization to showcase my work.
 
 ![landing page](https://github.com/user-attachments/assets/c485a960-38c9-4bf4-b982-9da98794f002)
 
