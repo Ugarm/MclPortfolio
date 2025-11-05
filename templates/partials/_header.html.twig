@@ -1,5 +1,178 @@
-<header class="bg-gray-800 text-white p-4">
-    <div class="container mx-auto flex justify-between text-center">
-        <h1 class="mt-24 mb-24 w-full text-2xl font-bold text-gray-200">Mitzi Castillo</h1>
+<header class="text-white h-screen flex flex-col overflow-hidden relative" style="background: #0a0a0a;">
+    <!-- Seamless Warm Neon Gradient -->
+    <div class="absolute inset-0 z-0" style="
+            background: linear-gradient(-45deg,
+                #4a00e0, #8e2de2, #24c6dc, #ff00cc, #4a00e0
+            );
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+        "></div>
+
+    <!-- Dark overlay for contrast -->
+    <div class="absolute inset-0 z-0" style="
+        background: radial-gradient(circle at center,
+            transparent 0%,
+            rgba(15, 5, 20, 0.95) 100%
+        );
+    "></div>
+
+    <!-- Header Banner -->
+    <div id="headerBanner" class="h-16 py-4 px-6 relative z-10 transition-all duration-1000 flex items-center justify-center" style="
+        background: rgba(20, 5, 25, 0.4);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 0 15px rgba(235, 91, 0, 0.2);
+        border-bottom: 1px solid rgba(217, 22, 86, 0.15);
+    ">
+        <div class="w-full max-w-screen-xl mx-auto grid grid-cols-3 items-center">
+            <!-- LANGUAGES - Centered by removing justify-start -->
+            <div id="languages" class="flex space-x-6 font-mono justify-center">
+                <p class="cursor-pointer transition-all duration-500 hover:text-[#FFB200]" style="text-shadow: 0 0 8px rgba(255, 178, 0, 0.6);">FR</p>
+                <p class="cursor-pointer transition-all duration-500 hover:text-[#EB5B00]" style="text-shadow: 0 0 8px rgba(235, 91, 0, 0.6);">ES</p>
+                <p class="cursor-pointer transition-all duration-500 hover:text-[#D91656]" style="text-shadow: 0 0 8px rgba(217, 22, 86, 0.6);">EN</p>
+            </div>
+
+            <!-- TIME ZONES - Already centered -->
+            <div class="flex justify-center font-mono space-x-6 text-sm tracking-wider">
+                <p>CDMX [<span id="mexico-time" style="text-shadow: 0 0 8px rgba(217, 22, 86, 0.7);"></span>]</p>
+                <p>Paris [<span id="paris-time" style="text-shadow: 0 0 8px rgba(255, 178, 0, 0.7);"></span>]</p>
+            </div>
+
+            <!-- ABOUT BUTTON - Centered by removing justify-end -->
+            <div class="flex justify-center">
+                <button onclick="openAboutModal()">
+                    About
+                </button>
+            </div>
+        </div>
     </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 md:px-8 flex flex-col flex-grow justify-between h-full relative z-10">
+        <!-- Image Section -->
+        <div class="flex justify-center items-center flex-grow relative">
+            <!-- Dual-layer aura -->
+            <div class="absolute inset-0 flex justify-center items-center">
+                <div class="absolute w-[60vh] h-[60vh] rounded-full transition-all duration-3000" style="
+                    background: radial-gradient(circle, rgba(255,178,0,0.25) 0%, transparent 70%);
+                    filter: blur(40px);
+                    animation: floatAura 20s ease-in-out infinite alternate;
+                "></div>
+                <div class="absolute w-[60vh] h-[60vh] rounded-full transition-all duration-3000" style="
+                    background: radial-gradient(circle, rgba(217,22,86,0.2) 0%, transparent 70%);
+                    filter: blur(30px);
+                    animation: floatAura 24s ease-in-out infinite alternate-reverse;
+                "></div>
+            </div>
+
+            <!-- Image container -->
+            <div class="relative z-10 w-full max-w-2xl transition-all duration-1000" >
+                <img
+                    src="{{ asset('assets/mitzi.gif') }}"
+                    alt="Mitzi Castillo"
+                    class="w-full h-auto max-h-[50vh] object-cover hover:scale-105 transition-transform duration-500"
+                    style="filter: drop-shadow(0 0 15px rgba(255, 178, 0, 0.5));"
+                >
+            </div>
+        </div>
+
+        <!-- Art Direction Text -->
+        <div class="flex justify-center items-center">
+            <h1 class="text-xl sm:text-xl md:text-2xl font-mono tracking-wider transition-all duration-1000" style="
+                text-shadow: 0 0 10px rgba(255, 178, 0, 0.7),
+                             0 0 20px rgba(217, 22, 86, 0.5);
+                animation: textGlow 10s ease-in-out infinite alternate;
+            ">
+                Art Direction + Design + 3D
+            </h1>
+        </div>
+
+        <!-- Scroll Section -->
+        <div class="flex justify-center pb-8">
+            <div class="group flex flex-col items-center cursor-pointer"
+                 onclick="document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'nearest' });">
+                <p class="
+                    group-hover:opacity-100 group-hover:scale-110 font-mono
+                    transition-all duration-500 opacity-80
+                    text-white hover:text-[#FFB200] tracking-widest
+                " style="text-shadow: 0 0 8px rgba(255, 178, 0, 0.7);">
+                    SCROLL
+                </p>
+                <div class="
+                    bg-gradient-to-t from-[#FFB200] to-[#D91656] h-6 w-[2px] mt-3
+                    group-hover:h-8 group-hover:opacity-100 group-hover:scale-y-125
+                    transition-all duration-700
+                " style="box-shadow: 0 0 10px rgba(255, 178, 0, 0.5);"></div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+
+            50% { background-position: 50% 50%; }
+
+            100% { background-position: 100% 50%; }
+        }
+
+        @keyframes textGlow {
+            0% {
+                text-shadow: 0 0 10px rgba(255, 178, 0, 0.7),
+                             0 0 20px rgba(217, 22, 86, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 15px rgba(235, 91, 0, 0.8),
+                             0 0 25px rgba(100, 13, 95, 0.6);
+            }
+            100% {
+                text-shadow: 0 0 10px rgba(255, 178, 0, 0.7),
+                             0 0 20px rgba(217, 22, 86, 0.5);
+            }
+        }
+
+        @keyframes floatAura {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-30px) scale(1.05);
+                opacity: 0.9;
+            }
+        }
+    </style>
+
+    <script>
+        function updateTime() {
+            const parisTime = new Date().toLocaleTimeString("fr-FR", {
+                timeZone: "Europe/Paris",
+                hourCycle: "h23",
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            const mexicoTime = new Date().toLocaleTimeString("es-MX", {
+                timeZone: "America/Mexico_City",
+                hourCycle: "h23",
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            document.getElementById("paris-time").textContent = parisTime;
+            document.getElementById("mexico-time").textContent = mexicoTime;
+        }
+
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        function openAboutModal() {
+            document.getElementById('about-modal').classList.remove('hidden');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeAboutModal() {
+            document.getElementById('about-modal').classList.add('hidden');
+            document.body.classList.remove('modal-open');
+        }
+    </script>
 </header>
