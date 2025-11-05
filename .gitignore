@@ -27,4 +27,4 @@ yarn-error.log
 .env.*
 /.idea
 /var
-/public/bundles/
+/public/bundles/ 
