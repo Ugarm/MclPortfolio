@@ -32,7 +32,8 @@ class ContentCrudController extends AbstractCrudController
             TextField::new('title', 'Title')
                 ->setRequired(true),
             TextField::new('description', 'Description')
-                ->setRequired(true),
+                ->setRequired(true)
+                ->renderAsHtml(),
             TextField::new('file', 'File')
                 ->setFormType(VichFileType::class)
                 ->setFormTypeOptions([
