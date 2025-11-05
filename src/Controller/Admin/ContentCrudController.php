@@ -13,6 +13,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ContentCrudController extends AbstractCrudController
 {
@@ -23,26 +25,28 @@ class ContentCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        $isCreating = $pageName === Crud::PAGE_NEW;
+
         return [
-            TextField::new('title')
+            BooleanField::new('isPublished', 'Publish'),
+            TextField::new('title', 'Title')
                 ->setRequired(true),
-            TextEditorField::new('description')
-                ->setRequired(true),
-            TextField::new('file')
-            ->setFormType(VichFileType::class)
+            TextField::new('description', 'Description')
+                ->setRequired(true)
+                ->renderAsHtml(),
+            TextField::new('file', 'File')
+                ->setFormType(VichFileType::class)
                 ->setFormTypeOptions([
-                    'allow_delete' => false,
+                    'allow_delete' => true, // Enable file deletion
+                    'delete_label' => 'Delete current file', // Optional: Add a label for the delete checkbox
                     'download_uri' => true,
-                    'image_uri' => true,
                 ])
                 ->onlyOnForms()
-                ->setRequired(true)
-                ->setFormTypeOption('attr', ['accept' => 'image/*, video/*']),
+                ->setRequired($isCreating)
+                ->setFormTypeOption('constraints', $isCreating ? [new NotBlank(['message' => 'Please upload a file.'])] : []),
             ImageField::new('fileName', 'Contenu')
                 ->setBasePath('/uploads/images')
-                ->onlyOnIndex()
-                ->setRequired(true),
-            BooleanField::new('isPublished'),
+                ->onlyOnIndex(),
             ChoiceField::new('fileType')
                 ->setChoices([
                     'Video' => 'video',
@@ -50,7 +54,30 @@ class ContentCrudController extends AbstractCrudController
                 ])
                 ->renderAsNativeWidget()
                 ->setRequired(true),
-            ];
-    }
+            TextField::new('behanceLink', 'Behance link')
+                ->setRequired(false)
+                ->hideOnIndex(),
+            BooleanField::new('isBehanceLinkActive', 'Activate Behance link')
+            ->renderAsSwitch(false),
 
+            TextField::new('instagramLink', 'Instagram link')
+                ->setRequired(false)
+                ->hideOnIndex(),
+            BooleanField::new('isInstagramLinkActive', 'Activate Instagram link')
+                ->renderAsSwitch(false),
+
+            TextField::new('facebookLink', 'Facebook link')
+                ->setRequired(false)
+                ->hideOnIndex(),
+            BooleanField::new('isFacebookLinkActive', 'Activate Facebook link')
+                ->renderAsSwitch(false),
+
+            TextField::new('externalWebsiteLink', 'External website link')
+                ->setRequired(false)
+                ->hideOnIndex(),
+            BooleanField::new('isExternalWebsiteLinkActive', 'Activate external website link')
+                ->renderAsSwitch(false),
+        ];
+    }
 }
+

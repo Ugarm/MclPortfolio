@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Content;
+use App\Entity\Socials;
 use App\Entity\Users;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -24,7 +25,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Mcl Portfolio');
+            ->setTitle('Mitzi Castillo\'s personal dashboard');
     }
 
     public function configureMenuItems(): iterable
@@ -32,6 +33,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Users', 'fa fa-question-circle', Users::class);
         yield MenuItem::linkToCrud('Content', 'fa fa-question-circle', Content::class);
+        yield MenuItem::linkToCrud('Socials & Contact', 'fa fa-question-circle', Socials::class);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }

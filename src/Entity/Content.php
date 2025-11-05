@@ -21,13 +21,13 @@ class Content
     #[ORM\Column(length: 100)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 750)]
+    #[ORM\Column(length: 2500)]
     private ?string $description = null;
 
     #[ORM\Column]
     private ?bool $isPublished = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $fileName = null;
 
     #[ORM\Column(length: 10, nullable: true)]
@@ -46,6 +46,48 @@ class Content
     #[Vich\UploadableField(mapping: 'images', fileNameProperty: 'fileName')]
     private ?File $file = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $behanceLink = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $instagramLink = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $facebookLink = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $externalWebsiteLink = null;
+
+    #[ORM\Column(type: 'boolean', options: ["default" => false])]
+    private bool $isBehanceLinkActive = false;
+
+    #[ORM\Column(type: 'boolean',  options: ["default" => false])]
+    private bool $isInstagramLinkActive = false;
+
+    #[ORM\Column(type: 'boolean',  options: ["default" => false])]
+    private bool $isFacebookLinkActive = false;
+
+    #[ORM\Column(type: 'boolean',  options: ["default" => false])]
+    private bool $isExternalWebsiteLinkActive = false;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
     public function getFile(): ?File
     {
         return $this->file;
@@ -56,15 +98,14 @@ class Content
         $this->file = $file;
 
         if (null !== $file) {
+            // Only update the fileName if a new file is uploaded
+            $this->fileName = $file->getFilename(); // Or generate a unique filename
             $this->updatedAt = new \DateTimeImmutable();
+        } else {
+            // Set fileName to null if the file is deleted
+            $this->fileName = null;
         }
     }
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int
     {
@@ -112,7 +153,7 @@ class Content
         return $this->fileName;
     }
 
-    public function setFileName(string $fileName): static
+    public function setFileName(?string $fileName): static
     {
         $this->fileName = $fileName;
 
@@ -143,15 +184,85 @@ class Content
         return $this;
     }
 
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
+    public function getBehanceLink(): ?string
     {
-        $this->createdAt = new \DateTimeImmutable();
+        return $this->behanceLink;
     }
 
-    #[ORM\PreUpdate]
-    public function setUpdatedAtValue(): void
+    public function setBehanceLink(?string $behanceLink): void
     {
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->behanceLink = $behanceLink;
+    }
+
+    public function getInstagramLink(): ?string
+    {
+        return $this->instagramLink;
+    }
+
+    public function setInstagramLink(?string $instagramLink): void
+    {
+        $this->instagramLink = $instagramLink;
+    }
+
+    public function getFacebookLink(): ?string
+    {
+        return $this->facebookLink;
+    }
+
+    public function setFacebookLink(?string $facebookLink): void
+    {
+        $this->facebookLink = $facebookLink;
+    }
+
+    public function getExternalWebsiteLink(): ?string
+    {
+        return $this->externalWebsiteLink;
+    }
+
+    public function setExternalWebsiteLink(?string $externalWebsiteLink): void
+    {
+        $this->externalWebsiteLink = $externalWebsiteLink;
+    }
+
+    public function isBehanceLinkActive(): bool
+    {
+        return $this->isBehanceLinkActive;
+    }
+
+    public function setIsBehanceLinkActive(bool $isBehanceLinkActive): void
+    {
+
+            $this->isBehanceLinkActive = $isBehanceLinkActive;
+
+    }
+
+    public function isInstagramLinkActive(): bool
+    {
+        return $this->isInstagramLinkActive;
+    }
+
+    public function setIsInstagramLinkActive(bool $isInstagramLinkActive): void
+    {
+        $this->isInstagramLinkActive = $isInstagramLinkActive;
+    }
+
+    public function isFacebookLinkActive(): bool
+    {
+        return $this->isFacebookLinkActive;
+    }
+
+    public function setIsFacebookLinkActive(bool $isFacebookLinkActive): void
+    {
+        $this->isFacebookLinkActive = $isFacebookLinkActive;
+    }
+
+    public function isExternalWebsiteLinkActive(): bool
+    {
+        return $this->isExternalWebsiteLinkActive;
+    }
+
+    public function setIsExternalWebsiteLinkActive(bool $isExternalWebsiteLinkActive): void
+    {
+        $this->isExternalWebsiteLinkActive = $isExternalWebsiteLinkActive;
     }
 }
